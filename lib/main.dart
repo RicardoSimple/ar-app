@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/pages/help.dart';
 import 'package:flutter_template/pages/home.dart';
 import 'package:flutter_template/pages/settings.dart';
+import 'package:flutter_template/components/app_drawer.dart';
+import 'package:flutter_template/routes.dart'; // 导入 AppDrawer 组件
 
 void main() {
   runApp(MyApp());
@@ -15,7 +18,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(), // 使用 MainScreen 作为应用程序的主屏幕
+      routes: Routes,
+      initialRoute: "/",
     );
   }
 }
@@ -26,20 +30,17 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0; // 初始化底部导航栏选中的索引
+  int _selectedIndex = 0;
 
-  // 定义底部导航栏的页面列表
   final List<Widget> _pages = [
-    HomePage(), // 主页
-    SettingPage(), // 设置页面
-    HomePage()
-    // 其他页面...
+    HomePage(),
+    SettingPage(),
+    HelpPage(), // 可以替换成其他页面，例如帮助页面
   ];
 
-  // 底部导航栏按钮点击事件处理方法
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; // 更新选中的索引
+      _selectedIndex = index;
     });
   }
 
@@ -48,17 +49,20 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('AR App'),
-        leading: IconButton( // 左侧按钮
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            // 处理左侧按钮点击事件，弹出侧边栏或其他操作
-
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
           },
         ),
       ),
-      body: _pages[_selectedIndex], // 根据选中的索引显示对应页面内容
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -68,14 +72,14 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Settings',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
+            icon: Icon(Icons.help),
             label: 'Help',
           ),
-          // 其他底部导航栏按钮...
         ],
-        currentIndex: _selectedIndex, // 当前选中的索引
-        onTap: _onItemTapped, // 按钮点击事件处理方法
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
+      drawer: AppDrawer(onItemTapped: _onItemTapped), // 使用 AppDrawer 组件
     );
   }
 }
