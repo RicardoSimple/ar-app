@@ -66,8 +66,8 @@ class TodoItem extends StatelessWidget {
                   ? TextDecoration.lineThrough
                   : TextDecoration.none,
               color: todo.completed
-                  ? themeData.textTheme.bodyText2?.color?.withOpacity(0.5)
-                  : themeData.textTheme.bodyText2?.color,
+                  ? themeData.textTheme.bodyMedium?.color?.withOpacity(0.5)
+                  : themeData.textTheme.bodyMedium?.color,
             ),
           ),
           onTap: () {

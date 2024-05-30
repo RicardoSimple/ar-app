@@ -1,81 +1,81 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_template/controller/settings.dart';
-import 'package:flutter_template/controller/todo.dart';
-import 'package:flutter_template/controller/user.dart';
-import 'package:flutter_template/i18n/translations.dart';
-import 'package:flutter_template/repository/todo_repository.dart';
-import 'package:flutter_template/repository/user_repository.dart';
-import 'package:flutter_template/routes.dart';
-import 'package:flutter_template/pages/unknown.dart';
-import 'package:flutter_template/service/http_service.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:flutter_template/pages/home.dart';
+import 'package:flutter_template/pages/settings.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
-  await initServices();
-  runApp(const MyApp());
-}
-
-initServices() async {
-  await Get.putAsync<HttpService>(
-      () async => await HttpService().init(baseUrl: "https://api.github.com"));
-  await Get.putAsync<ToDoRepository>(() async => await ToDoRepository().init());
-  Get.put(UserRepository().init());
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'AR APP',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MainScreen(), // 使用 MainScreen 作为应用程序的主屏幕
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0; // 初始化底部导航栏选中的索引
+
+  // 定义底部导航栏的页面列表
+  final List<Widget> _pages = [
+    HomePage(), // 主页
+    SettingPage(), // 设置页面
+    HomePage()
+    // 其他页面...
+  ];
+
+  // 底部导航栏按钮点击事件处理方法
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // 更新选中的索引
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TodoController());
-    Get.put(SettingsController());
-    Get.put(UserController());
-    return GetMaterialApp(
-      initialRoute: '/',
-      getPages: routes,
-      unknownRoute:
-          GetPage(name: '/not_found', page: () => const UnknownRoutePage()),
-      theme: FlexThemeData.light(
-        scheme: FlexScheme.materialBaseline,
-        surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-        blendLevel: 7,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 10,
-          blendOnColors: false,
-          useTextTheme: true,
-          useM2StyleDividerInM3: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('AR App'),
+        leading: IconButton( // 左侧按钮
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            // 处理左侧按钮点击事件，弹出侧边栏或其他操作
+
+          },
         ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        swapLegacyOnMaterial3: true,
-        // To use the Playground font, add GoogleFonts package and uncomment
-        // fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
-      darkTheme: FlexThemeData.dark(
-        scheme: FlexScheme.materialBaseline,
-        surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-        blendLevel: 13,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 20,
-          useTextTheme: true,
-          useM2StyleDividerInM3: true,
-        ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        swapLegacyOnMaterial3: true,
-        // To use the Playground font, add GoogleFonts package and uncomment
-        // fontFamily: GoogleFonts.notoSans().fontFamily,
+      body: _pages[_selectedIndex], // 根据选中的索引显示对应页面内容
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: 'Help',
+          ),
+          // 其他底部导航栏按钮...
+        ],
+        currentIndex: _selectedIndex, // 当前选中的索引
+        onTap: _onItemTapped, // 按钮点击事件处理方法
       ),
-      themeMode: ThemeMode.system,
-      locale: const Locale('zh'),
-      translations: MyTranslations(),
-      builder: EasyLoading.init(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
