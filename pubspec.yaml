@@ -1,4 +1,4 @@
-name: flutter_template
+name: ar_app
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -49,6 +49,7 @@ dependencies:
   auth_buttons: ^1.0.1+4
   flutter_web_auth_2: ^2.1.5
   extended_image: ^8.0.2
+  camera: ^0.9.4+5  # 添加相机插件依赖
 
   markdown: any
 dev_dependencies:

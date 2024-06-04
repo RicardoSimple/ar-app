@@ -1,7 +1,7 @@
-import 'package:flutter_template/main.dart';
-import 'package:flutter_template/pages/help.dart';
-import 'package:flutter_template/pages/home.dart';
-import 'package:flutter_template/pages/settings.dart';
+import 'package:ar_app/main.dart';
+import 'package:ar_app/pages/help.dart';
+import 'package:ar_app/pages/home.dart';
+import 'package:ar_app/pages/settings.dart';
 import 'package:get/get.dart';
 
 final Routes = {

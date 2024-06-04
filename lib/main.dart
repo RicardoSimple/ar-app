@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_template/pages/help.dart';
-import 'package:flutter_template/pages/home.dart';
-import 'package:flutter_template/pages/settings.dart';
-import 'package:flutter_template/components/app_drawer.dart';
-import 'package:flutter_template/routes.dart'; // 导入 AppDrawer 组件
+import 'package:ar_app/pages/camera.dart';
+import 'package:ar_app/pages/help.dart';
+import 'package:ar_app/pages/home.dart';
+import 'package:ar_app/pages/settings.dart';
+import 'package:ar_app/components/app_drawer.dart';
+import 'package:ar_app/routes.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart'; // 导入 AppDrawer 组件
 
 void main() {
   runApp(MyApp());
@@ -52,13 +54,27 @@ class _MainScreenState extends State<MainScreen> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
             );
           },
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add_a_photo_outlined), // 这里是按钮图�?
+            onPressed: () {
+              // 点击按钮时执行的操作
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return CameraPage(); // 显示相机界面
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -79,7 +95,8 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      drawer: AppDrawer(onItemTapped: _onItemTapped), // 使用 AppDrawer 组件
+      drawer: AppDrawer(onItemTapped: _onItemTapped),
     );
+
   }
 }
